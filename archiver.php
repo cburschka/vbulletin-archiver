@@ -51,7 +51,7 @@ function index_jolt_forum($id, $path = 'files') {
     if ($pages[1]) {
       $pages = $pages[1][count($pages[1]) - 1];
       for ($i = 2; $i <= $pages; $i++) {
-        $data = download(sprintf(URL_JOLT_TOPIC_PAGER, $tid, $i), "$path/$id/t-$id-p-$i.html");
+        $data = download(sprintf(URL_JOLT_TOPIC_PAGER, $tid, $i), "$path/$id/t-$tid-p-$i.html");
       }
     }
     print_c(++$done . " / " . count($topics) . ", ". sprintf('%0.2f%%', $done*100/count($topics)) . ", " . remaining($start, $done, count($topics)));
