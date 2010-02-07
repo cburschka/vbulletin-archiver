@@ -20,11 +20,11 @@ define('CLOBBER', FALSE);
 // Set to TRUE to force re-parsing of local files. Needed only in rare cases of malfunction.
 define('REPARSE', FALSE);
 
-define('URL_JOLT_ROOT', 'http://forums.jolt.co.uk/archive/index.php/');
-define('URL_JOLT_FORUM', 'http://forums.jolt.co.uk/archive/index.php/f-%d.html');
-define('URL_JOLT_FORUM_PAGER', 'http://forums.jolt.co.uk/archive/index.php/f-%d-p-%d.html');
-define('URL_JOLT_TOPIC', 'http://forums.jolt.co.uk/archive/index.php/t-%d.html');
-define('URL_JOLT_TOPIC_PAGER', 'http://forums.jolt.co.uk/archive/index.php/t-%d-p-%d.html');
+define('URL_JOLT_ROOT', 'http://forums.joltonline.com/archive/index.php/');
+define('URL_JOLT_FORUM', URL_JOLT_ROOT . 'f-%d.html');
+define('URL_JOLT_FORUM_PAGER', URL_JOLT_ROOT . 'f-%d-p-%d.html');
+define('URL_JOLT_TOPIC', URL_JOLT_ROOT . 't-%d.html');
+define('URL_JOLT_TOPIC_PAGER', URL_JOLT_ROOT . 't-%d-p-%d.html');
 
 function index_jolt_forum($id, $path = 'files') {
   $start = microtime(TRUE);
