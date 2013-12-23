@@ -1,14 +1,14 @@
 <?php
 
 /******************************************************
- *               Jolt Forum Archiver                  *
+ *             vBulletin Forum Archiver               *
  *           an Ermarian Network production           *
  *        Arancaytar <arancaytar@ermarian.net>        *
  *                                                    *
  * This application can be modified and distributed   *
  * under the GNU General Public License 3.0 or later. *
- * Libraries based on the Drupal project (GPL 2) are  *
- * included.                                          *
+ * Libraries based on the Drupal project (GPL 2 or    *
+ * later) are included.                               *
  ******************************************************/
 
 
@@ -20,13 +20,13 @@ define('CLOBBER', FALSE);
 // Set to TRUE to force re-parsing of local files. Needed only in rare cases of malfunction.
 define('REPARSE', FALSE);
 
-define('URL_JOLT_ROOT', 'http://forums.joltonline.com/archive/index.php/');
-define('URL_JOLT_FORUM', URL_JOLT_ROOT . 'f-%d.html');
-define('URL_JOLT_FORUM_PAGER', URL_JOLT_ROOT . 'f-%d-p-%d.html');
-define('URL_JOLT_TOPIC', URL_JOLT_ROOT . 't-%d.html');
-define('URL_JOLT_TOPIC_PAGER', URL_JOLT_ROOT . 't-%d-p-%d.html');
+define('URL_ROOT', 'http://forums.joltonline.com/archive/index.php/');
+define('URL_FORUM', URL_ROOT . 'f-%d.html');
+define('URL_FORUM_PAGER', URL_ROOT . 'f-%d-p-%d.html');
+define('URL_TOPIC', URL_ROOT . 't-%d.html');
+define('URL_TOPIC_PAGER', URL_ROOT . 't-%d-p-%d.html');
 
-function index_jolt_forum($id, $path = 'files') {
+function index_forum($id, $path = 'files') {
   $start = microtime(TRUE);
   print "Creating path... ";
   r_mkdir("$path/$id/");
@@ -36,7 +36,7 @@ function index_jolt_forum($id, $path = 'files') {
   
   print "Determining forum size... ";
   
-  $data = download(sprintf(URL_JOLT_FORUM, $id), "$path/$id/f-$id.html", TRUE); // force parse.
+  $data = download(sprintf(URL_FORUM, $id), "$path/$id/f-$id.html", TRUE); // force parse.
   preg_match_all("/f-$id(-p-([0-9]+))?\.html/", $data, $pages);
   $pages = $pages[2] ? $pages[2][count($pages[2]) - 1] : 1;
   print "$pages pages, ~" . ($pages*250) . " topics\n";
@@ -58,7 +58,7 @@ function index_jolt_forum($id, $path = 'files') {
   print "Saving forum index... ";
   print_c("1 / $pages, " . sprintf('%0.2f%%', 100 / $pages) . ", " . remaining($start, 1, $pages));
   for ($i = 2; $i <= $pages; $i++) {
-    $data = download(sprintf(URL_JOLT_FORUM_PAGER, $id, $i), "$path/$id/f-$id-p-$i.html");
+    $data = download(sprintf(URL_FORUM_PAGER, $id, $i), "$path/$id/f-$id-p-$i.html");
     
     preg_match_all('%<a href="t-([0-9]+)\.html">(.+?)</a>%', $data, $topics_raw);
     if ($topics_raw[1]) $topics += array_combine($topics_raw[1], $topics_raw[2]);
@@ -83,12 +83,12 @@ function index_jolt_forum($id, $path = 'files') {
   print_c("0 / " . count($topics) . ", 0.00%, " . remaining($start, 0, count($topics)));
   $done = 0;
   foreach ($topics as $tid => $title) {
-    $data = download(sprintf(URL_JOLT_TOPIC, $tid), "$path/$id/t-$tid.html");
+    $data = download(sprintf(URL_TOPIC, $tid), "$path/$id/t-$tid.html");
     preg_match_all("/t-$tid-p-([0-9]+)\.html/", $data, $pages);
     if ($pages[1]) {
       $pages = $pages[1][count($pages[1]) - 1];
       for ($i = 2; $i <= $pages; $i++) {
-        $data = download(sprintf(URL_JOLT_TOPIC_PAGER, $tid, $i), "$path/$id/t-$tid-p-$i.html");
+        $data = download(sprintf(URL_TOPIC_PAGER, $tid, $i), "$path/$id/t-$tid-p-$i.html");
       }
     }
     print_c(++$done . " / " . count($topics) . ", ". sprintf('%0.2f%%', $done*100/count($topics)) . ", " . remaining($start, $done, count($topics)));
@@ -134,7 +134,7 @@ function format_time($remaining) {
 function download($url, $local, $reparse = REPARSE) {
   if (CLOBBER || !file_exists($local)) {
     $resp = http($url);
-    $data = str_replace(URL_JOLT_ROOT, '', $resp->data);
+    $data = str_replace(URL_ROOT, '', $resp->data);
     file_put_contents($local, $data);
     return $data;
   }
@@ -149,6 +149,6 @@ if (@$_SERVER['REMOTE_ADDR']) exit("<span style='color:red;font-weight:bold'>Err
 
 if (!$forum = @$_SERVER['argv'][1]) exit("Usage: php archiver.php <forum-id>\n");
 
-index_jolt_forum($forum);
+index_forum($forum);
 
 

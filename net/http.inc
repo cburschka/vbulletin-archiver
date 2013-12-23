@@ -2,10 +2,13 @@
 
 /**
  * This is a light-weight PHP implementation of the HTTP client specification.
- * It is both smaller and slightly faster than cURL, and requires only the fsockopen() function to be enabled.
+ * It is both smaller and slightly faster than cURL, and requires only the 
+ * fsockopen() function to be enabled.
  *
- * This function is a modified version of the HTTP client included with the Drupal software.
- * Drupal is licensed under the GNU Public License 2.0, available at http://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
+ * This function is a modified version of the HTTP client included with the 
+ * Drupal software.
+ * Drupal is licensed under the GNU Public License 2 or later, available at 
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
  * This code must be distributed with the above notice.
  */
 
